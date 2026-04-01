@@ -10,6 +10,7 @@ node_modules
 dist
 apps/server/dist
 apps/client/dist
+*.tsbuildinfo
 # Local databases
 *.db
 *.db-journal
