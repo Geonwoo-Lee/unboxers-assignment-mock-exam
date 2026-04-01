@@ -9,7 +9,7 @@ node_modules
 # Build output
 dist
 apps/server/dist
-
+apps/client/dist
 # Local databases
 *.db
 *.db-journal
@@ -21,6 +21,10 @@ apps/server/generated
 
 # macOS
 .DS_Store
+
+# IDE
+.idea
+.vscode
 
 # results
 results/

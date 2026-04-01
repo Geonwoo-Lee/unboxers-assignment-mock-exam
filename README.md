@@ -244,3 +244,25 @@ pnpm dev
 - `pnpm install`
 - `pnpm dev`
 - 웹앱 실행 주소 기재
+
+## Web App Run
+
+```bash
+pnpm install
+```
+
+터미널 1 — 서버 실행:
+
+```bash
+pnpm dev
+```
+
+터미널 2 — 클라이언트 실행:
+
+```bash
+cd apps/client
+pnpm dev
+```
+
+- 서버 주소: `http://localhost:3001`
+- 클라이언트 주소: `http://localhost:3000`
