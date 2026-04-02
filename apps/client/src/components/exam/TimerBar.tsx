@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import HelpButton from "./HelpButton";
+import { useCountdown } from "../../hooks/useCountdown";
 
 interface Props {
   totalSeconds: number;
@@ -8,51 +10,72 @@ interface Props {
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
-  return `${m}분 ${String(s).padStart(2, "0")}`;
+  return `${m}분 ${String(s).padStart(2, "0")}초`;
 }
 
-const WARNING_SECONDS = 60;
-
 export default function TimerBar({ totalSeconds, onExpire }: Props) {
-  const [remaining, setRemaining] = useState(totalSeconds);
+  const remaining = useCountdown(totalSeconds, onExpire);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const rafRef = useRef<number>(0);
+
+  const WARNING_SECONDS = totalSeconds * 0.1;
 
   useEffect(() => {
-    if (remaining <= 0) {
-      onExpire();
-      return;
-    }
-    const id = setTimeout(() => setRemaining((r) => r - 1), 1000);
-    return () => clearTimeout(id);
-  }, [remaining, onExpire]);
+    startTimeRef.current = performance.now();
 
-  const progress = remaining / totalSeconds;
+    const animate = (now: number) => {
+      const elapsed = (now - startTimeRef.current!) / 1000;
+      const progress = Math.min(elapsed / totalSeconds, 1);
+
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${progress * 100}%`;
+      }
+
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [totalSeconds]);
+
   const isWarning = remaining <= WARNING_SECONDS;
+  const totalMinutes = Math.round(totalSeconds / 60);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-      {isWarning && (
-        <div className="text-center py-1 bg-red-50">
-          <p className="text-xs text-gray-500">시험이 곧 종료됩니다</p>
-          <p className="text-lg font-bold text-gray-900">
-            {remaining}초 뒤에 자동으로 제출됩니다. 답안을 모두 입력해주세요.
+    <div className="shrink-0 bg-white border-t border-gray-200">
+      <div className="flex items-center justify-between px-15 py-7.5">
+        <div className="flex flex-col flex-1 gap-2">
+          <p className="text-[17px] font-extrabold leading-none tracking-[0.36px] text-gradient-dark">
+            {isWarning ? "시험이 곧 종료됩니다" : "시험 종료까지 남은 시간"}
           </p>
+          <div className="flex items-end justify-between">
+            {isWarning ? (
+              <p className="text-gradient-dark whitespace-nowrap">
+                <span className="text-[48px] font-extrabold leading-none tracking-[0.36px] tabular-nums">{formatTime(remaining)}</span>
+                <span className="text-[26px] font-extrabold leading-none tracking-[0.36px]"> 뒤에 자동으로 제출됩니다. 답안을 모두 입력해주세요</span>
+              </p>
+            ) : (
+              <p className="text-[48px] font-extrabold leading-none tracking-[0.36px] text-gradient-dark tabular-nums">
+                {formatTime(remaining)}
+              </p>
+            )}
+            <p className="text-[17px] font-semibold leading-none tracking-[0.36px] text-gradient-dark tabular-nums">시험 시간 {totalMinutes}분</p>
+          </div>
+          <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              ref={progressBarRef}
+              className={`h-full rounded-full ${isWarning ? "bg-[#F44C47]" : "bg-gradient-to-r from-[#333333] to-[#585858]"}`}
+              style={{ width: "0%" }}
+            />
+          </div>
         </div>
-      )}
-      <div className="flex items-center justify-between px-6 py-2">
-        {!isWarning && (
-          <p className="text-sm text-gray-500">
-            시험이 곧 시작됩니다...
-          </p>
-        )}
-        <p className="ml-auto text-sm text-gray-600">
-          시험 시간 {formatTime(remaining)}
-        </p>
-      </div>
-      <div className="h-1.5 bg-gray-100">
-        <div
-          className={`h-full transition-all duration-1000 ${isWarning ? "bg-red-400" : "bg-blue-400"}`}
-          style={{ width: `${progress * 100}%` }}
-        />
+
+        <div className="shrink-0 ml-9">
+          <HelpButton />
+        </div>
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ export interface ObjectiveSectionProps {
   onObjectiveMark: (questionNumber: number, option: number) => void;
   hideHeader?: boolean;
   noBorderTop?: boolean;
+  locked?: boolean;
 }
 
 const OBJECTIVE_STARTS = [1, 11, 21];
@@ -27,6 +28,7 @@ export default function ObjectiveSection({
   onObjectiveMark,
   hideHeader = false,
   noBorderTop = false,
+  locked = false,
 }: ObjectiveSectionProps) {
   return (
     <div className={`flex flex-col ${noBorderTop ? "" : "omr-border-t"}`}>
@@ -41,9 +43,7 @@ export default function ObjectiveSection({
             <div className="flex flex-1 omr-border-r omr-border-b">
               <NumberColumn numbers={Array.from({ length: 10 }, (_, i) => start + i)} />
 
-              {/* 버블 컬럼: NumberColumn과 동일한 py-3 gap-3 단일 구조 */}
               <div className="relative flex flex-col gap-3 py-3 px-2">
-                {/* 하이라이트 배경 (absolute → 레이아웃 무영향) */}
                 <div
                   className={`absolute inset-x-0 bg-[#5784F11A] ${
                     HIGHLIGHT_HALF[start] === "bottom"
@@ -51,10 +51,8 @@ export default function ObjectiveSection({
                       : "top-0 h-[50%]"
                   }`}
                 />
-                {/* 점선 구분선: 정확히 중간 지점 (레이아웃 무영향) */}
                 <div className="absolute inset-x-0 top-[50%] border-t-[1.5px] border-dashed border-inbrain-lightblue" />
 
-                {/* 10개 행 단일 렌더 */}
                 {Array.from({ length: 10 }, (_, i) => {
                   const n = start + i;
                   return (
@@ -66,6 +64,7 @@ export default function ObjectiveSection({
                             value={option}
                             selected={(objectiveAnswers[n] ?? []).includes(option)}
                             disabled={n > activeObjective}
+                            locked={locked}
                             onClick={() => onObjectiveMark(n, option)}
                           />
                         ))}
@@ -76,7 +75,6 @@ export default function ObjectiveSection({
               </div>
             </div>
 
-            {/* 바코드 */}
             <div className="flex mt-auto">
               <div className="w-7 shrink-0" />
               <div className="flex items-end px-2 gap-2.5 py-1.5">

@@ -17,22 +17,22 @@ const INFO_ROWS = [
 export default function InfoSection({ examInfo, studentInfo }: Props) {
   return (
     <div className="flex flex-col shrink-0">
-      <div className="flex omr-border-l omr-border-t omr-border-b w-full">
-        <div className="flex flex-col ">
+      <div className="flex omr-border-l omr-border-t omr-border-b">
+        <div className="flex flex-col">
           {INFO_ROWS.map(({ label }, idx) => (
             <div
               key={label}
-              className={`h-10 omr-border-r text-sm font-semibold text-inbrain-blue flex items-center justify-center w-6  py-1 [writing-mode:vertical-rl] ${idx < INFO_ROWS.length - 1 ? "omr-border-b" : ""}`}
+              className={`w-7 h-10 omr-border-r text-sm font-semibold text-inbrain-blue flex items-center justify-center py-1 [writing-mode:vertical-rl] ${idx < INFO_ROWS.length - 1 ? "omr-border-b" : ""}`}
             >
               {label}
             </div>
           ))}
         </div>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col">
           {INFO_ROWS.map(({ label, getValue }, idx) => (
             <div
               key={label}
-              className={`text-17 font-bold text-inbrain-blue flex items-center justify-center h-10 px-2 py-1 text-xs   ${idx < INFO_ROWS.length - 1 ? "omr-border-b" : ""}`}
+              className={`w-43 h-10 font-bold text-inbrain-blue flex items-center justify-center px-2 py-1 text-xs ${idx < INFO_ROWS.length - 1 ? "omr-border-b" : ""}`}
             >
               {getValue(examInfo, studentInfo)}
             </div>
