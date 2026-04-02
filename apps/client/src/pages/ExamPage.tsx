@@ -222,7 +222,7 @@ export default function ExamPage() {
     setTimeout(() => {
       setSubmitResult(data);
       setStep("result");
-    }, 1000);
+    }, 2000);
   });
 
   const handleGoToScanner = useCallback(() => {
