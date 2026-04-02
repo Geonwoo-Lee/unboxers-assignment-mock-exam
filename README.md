@@ -247,17 +247,27 @@ pnpm dev
 
 ## Web App Run
 
+**1. 의존성 설치** (루트에서 한 번만 서버·클라이언트 전체 설치)
+
 ```bash
 pnpm install
 ```
 
-터미널 1 — 서버 실행:
+**2. DB 초기화** (최초 실행 시에만)
+
+```bash
+pnpm db:generate
+pnpm db:push
+pnpm db:seed
+```
+
+**3. 서버 실행** (터미널 1)
 
 ```bash
 pnpm dev
 ```
 
-터미널 2 — 클라이언트 실행:
+**4. 클라이언트 실행** (터미널 2)
 
 ```bash
 cd apps/client
