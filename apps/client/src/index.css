@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@theme {
+  --color-inbrain-lightblue: #5784F1;
+  --color-inbrain-blue: #364F8E;
+  --color-gs-1: #090909;
+  --color-gs-4: #F5F5F5;
+  --color-gs-6: #FFFFFF;
+  --color-gs-400: #BDBCB8;
+  --color-gs-500: #A5A4A0;
+  --color-omr-bg: #FFFDF1;
+  --text-17: 17px;
+}
+
+* {
+  font-family: "Pretendard", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+
+@layer utilities {
+  .omr-border   { border: 1.5px solid #5784F1; }
+  .omr-border-t { border-top: 1.5px solid #5784F1; }
+  .omr-border-r { border-right: 1.5px solid #5784F1; }
+  .omr-border-b { border-bottom: 1.5px solid #5784F1; }
+  .omr-border-l { border-left: 1.5px solid #5784F1; }
+  .omr-border-dashed-t { border-top: 1.5px dashed #5784F1; }
+  .omr-border-dashed-b { border-bottom: 1.5px dashed #5784F1; }
+  .omr-header-h { height: 2.5rem; } /* h-10 = 40px */
+}

@@ -1,6 +1,17 @@
 export type AnswerType = "objective" | "subjective";
 export type ResultStatus = "correct" | "wrong" | "unanswered" | "duplicated";
 
+export interface StudentInfo {
+  name: string;
+  school: string;
+  grade: number;
+  studentNumber: number;
+  seatNumber: number;
+}
+
+export type ObjectiveAnswers = Record<number, number[]>;
+export type SubjectiveAnswers = Record<number, string>;
+
 export interface Answer {
   answerType: AnswerType;
   number: number;
